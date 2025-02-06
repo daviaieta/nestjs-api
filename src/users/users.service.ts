@@ -11,12 +11,22 @@ export class UsersService {
   }
 
   async createUser(user: User) {
-    console.log(user);
-    return this.prisma.user.create({
+    const createdUser = await this.prisma.user.create({
       data: {
         name: user.name,
         email: user.email,
       },
     });
+    return createdUser;
+  }
+
+  async findUser(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+    if (!user) {
+      return 'User not found';
+    }
+    return user;
   }
 }
